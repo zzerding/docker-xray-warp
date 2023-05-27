@@ -1,0 +1,27 @@
+version: '3'
+services:
+  keeporaclealive:
+    depends_on:
+      - warp
+    image: teddysun/xray
+    container_name: xray
+    restart: always
+    network_mode: host
+    ports:
+      - "12345:12345"
+    volumes:
+      - ./config.json:/etc/xray/config.json
+      - ./log/xray:/var/log/xray
+  warp:
+    image: warp-cli:v1
+    build:
+      context: .
+    container_name: warp
+    restart: always
+    network_mode: host
+    environment:
+      WARP_KEY: ${WARP_KEY} 
+    ports:
+      - "${WARP_PORT}:${WAPR_PORT}"
+    volumes:
+      - ./log/warp:/var/log/warp
